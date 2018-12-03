@@ -107,6 +107,11 @@ html.parser是python用来解析html的模块。它可以分析出html里面的�
 11.soup.tag.has_attr('id') 判断标签是否有某个属性
 """
 
+from bs4 import BeautifulSoup
+def has_class_but_no_id(tag):
+    return tag.has_attr('class') and not tag.has_attr('id')
+soup = BeautifulSoup(html_doc,"html.parser")
+print(soup.find_all(has_class_but_no_id))
 
 #用法实例：
 """
@@ -125,9 +130,9 @@ soup = BeautifulSoup(html_doc,"html.parser")
 #     print(link['href'])
 """
 
-from bs4 import BeautifulSoup
-def has_class_but_no_id(tag):
-    return tag.has_attr('class') and not tag.has_attr('id')
-soup = BeautifulSoup(html_doc,"html.parser")
-print(soup.find_all(has_class_but_no_id))
-
+#github和gitlab的区别
+"""
+github 是一个基于git实现的在线代码仓库，包含一个网站界面，向互联网开放 
+gitlab 是一个基于git实现的在线代码仓库软件，可以用gitlab自己搭建一个类似于github一样的系统
+    并且允许免费设置私有仓库,允许用户选择分享一个project的部分代码
+"""
