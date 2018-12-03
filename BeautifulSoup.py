@@ -124,7 +124,13 @@ soup = BeautifulSoup(html_doc,"html.parser")
 # for link in soup.find_all('a'):
 #     print(link['href'])
 """
-
+5.查看远程仓库的更多信息
+        git remote show [remote-name]
+        git remote show origin
+    6.远程仓库的移除与重命名
+        想要将 pb 重命名为 paul
+        1.git remote rename pb paul 引用 pb/master 的现在会引用 paul/master。
+        2.git remote rm paul
 from bs4 import BeautifulSoup
 def has_class_but_no_id(tag):
     return tag.has_attr('class') and not tag.has_attr('id')
