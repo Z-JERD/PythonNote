@@ -125,9 +125,9 @@ soup = BeautifulSoup(html_doc,"html.parser")
 #     print(link['href'])
 """
 
-from bs4 import BeautifulSoup
-def has_class_but_no_id(tag):
-    return tag.has_attr('class') and not tag.has_attr('id')
-soup = BeautifulSoup(html_doc,"html.parser")
-print(soup.find_all(has_class_but_no_id))
+# from bs4 import BeautifulSoup
+# def has_class_but_no_id(tag):
+#     return tag.has_attr('class') and not tag.has_attr('id')
+# soup = BeautifulSoup(html_doc,"html.parser")
+# print(soup.find_all(has_class_but_no_id))
 
