@@ -41,6 +41,18 @@ print(soup.prettify())  显示完整的html代码  嵌套数据结构
 html.parser是python用来解析html的模块。它可以分析出html里面的标签、数据等等，是一种处理html的简便途径
 
 """
+1.git stash 
+    帮助我们暂时存储已经开发一些功能的代码，继续做其他事情，做完之后，再回来继续开发
+  git stash pop 把开发的修改后,将放置在A的内容拿过来
+  pop时两种情况：1.自动合并
+                2.出现冲突：两个文件修改了同一行代码
+  
+    git stash           将当前工作区所有修改过的内容存储到“某个地方”，将工作区还原到当前版本未修改过的状态
+    git stash list      查看“某个地方”存储的所有记录
+    git stash clear     清空“某个地方”
+    git stash pop       将第一个记录从“某个地方”重新拿到工作区（可能有冲突）
+    git stash apply  编号 将指定编号记录从“某个地方”重新拿到工作区（可能有冲突） 
+    git stash drop   编号  删除指定编号的记录
 
 #BeautifulSoup的用法#
 """
