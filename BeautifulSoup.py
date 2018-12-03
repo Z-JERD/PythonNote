@@ -137,3 +137,4 @@ def has_class_but_no_id(tag):
 soup = BeautifulSoup(html_doc,"html.parser")
 print(soup.find_all(has_class_but_no_id))
 
+
