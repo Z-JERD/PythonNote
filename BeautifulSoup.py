@@ -130,9 +130,21 @@ soup = BeautifulSoup(html_doc,"html.parser")
 #     print(link['href'])
 """
 
+
 #github和gitlab的区别
 """
 github 是一个基于git实现的在线代码仓库，包含一个网站界面，向互联网开放 
 gitlab 是一个基于git实现的在线代码仓库软件，可以用gitlab自己搭建一个类似于github一样的系统
     并且允许免费设置私有仓库,允许用户选择分享一个project的部分代码
 """
+5.查看远程仓库的更多信息
+        git remote show [remote-name]
+        git remote show origin
+    6.远程仓库的移除与重命名
+        想要将 pb 重命名为 paul
+        1.git remote rename pb paul 引用 pb/master 的现在会引用 paul/master。
+        2.git remote rm paul
+from bs4 import BeautifulSoup
+def has_class_but_no_id(tag):
+    return tag.has_attr('class') and not tag.has_attr('id')
+
