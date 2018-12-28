@@ -1,0 +1,58 @@
+1.oracle vm中安装ubuntu
+	https://jingyan.baidu.com/article/b24f6c823862a986bfe5dadc.html?qq-pf-to=pcqq.group
+2.vm中安装ubuntu
+	https://blog.csdn.net/u013142781/article/details/50529030
+
+1.Ubuntu安装软件sudo apt-get install出现以下错误：
+	E: Could not get lock /var/lib/dpkg/lock - open(11:Resource temporarily unavailable) 
+	E: Unable to lock the administration directory(/var/lib/dpkg/),is another process using it? 
+	解决方案：
+	sudo rm /var/cache/apt/archives/lock
+	sudo rm /var/lib/dpkg/lock
+2.创建的ubuntu虚拟机与主机进行复制粘贴
+	https://blog.csdn.net/qq_34068668/article/details/80540539
+3.安装python和pip	
+	sudo apt-get install python3.5
+	sudo apt-get install python3-pip
+	安装虚拟环境
+	sudo pip3 install virtualenv
+	建立虚拟环境的存放文件夹
+	cd ~/.virtualenvs # 进入那个目录
+	virtualenv spider_py3 -ppython3 # 创建虚拟环境 spider_py3 是虚拟环境名字， -p指定Python版本(默认Python2)
+	source spider_py3/bin/activate # 进入虚拟环境 OK了
+	退出虚拟环境
+	deactivate
+	pip3下载的模块都在：
+	usr/local/lib/python3.5/dist-packages
+4.安装git
+	https://jingyan.baidu.com/article/9158e0000de279a255122858.html
+5.更新一下软件源：
+	sudo apt-get update
+6.软件的二进制文件都可以在 /usr/bin 或 /usr/local/bin
+	默认Python版本
+		$ python --version
+		Python 2.7.6
+	1.修改一下别名 alias 
+		$ alias python='/usr/bin/python3'
+		$ python --version
+		Python 3.4.3  # 版本已经改变
+	2.创建软连接
+	$ ln -s python /usr/bin/python3
+	$ python --version
+		Python 3.4.3
+7.xshell连接ubuntu
+	~$ ps -e|grep ssh 查看是否有sshd
+	安装ssh
+	sudo apt-get install openssh-server
+	在设置中选择网络--高级--接入网线
+8.安装 lrzsz
+	sudo apt-get install lrzsz
+9.压缩与解压缩
+	zip包
+		zip -r archive_name.zip directory_to_compress
+	解压：unzip archive_name.zip
+	tar包
+	 tar -zcvf archive_name.tar.gz directory_to_compress
+	 解压：tar -zxvf archive_name.tar.gz
+10.安装pycharm
+	https://jingyan.baidu.com/article/c45ad29c030102051753e20f.html
