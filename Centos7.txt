@@ -1,0 +1,98 @@
+VirtualBox下安装CentOS7系统
+    https://www.cnblogs.com/hihtml5/p/8217062.html
+
+安装MySQL5.7
+    1.添加mysql源
+        # rpm -Uvh http://repo.mysql.com//mysql57-community-release-el7-7.noarch.rpm
+    2.安装mysql
+        # yum -y install mysql-community-server
+    3.启动mysql并设置为开机自启动服务
+        # chkconfig mysqld on
+        # service mysqld start
+    4.检查mysql服务状态
+        # service mysqld status
+    第一次启动mysql，会在日志文件中生成root用户的一个随机密码，使用下面命令查看该密码
+        # grep 'temporary password' /var/log/mysqld.log
+    设置新密码：
+        mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+        如果出现：
+            Your password does not satisfy the current policy requirements
+            原因：密码过于简单，更改密码策略
+            mysql> set global validate_password_policy=0;
+            mysql> set global validate_password_length=4;
+    
+    MySQL数据库文件在/var/lib/mysql  配置文件在/etc/my.cnf
+
+Centos7中设置MySQL授权远程登录
+    1.mysql> use mysql
+    2.mysql> grant all privileges on *.* to 'root'@'%' identified by '12345';
+             使用root:12345来外部访问
+    3.刷新权限:
+        mysql> flush privileges;
+    4.开放端口
+        [root@localhost /]# vim /etc/sysconfig/iptables
+            添加一下内容：
+                -A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT
+    5.关闭防火墙：
+        systemctl stop firewalld.service
+        禁止firewall开机启动：systemctl disable firewalld.service 
+    
+    启动、关闭、重启、查看MySQL服务
+    # service mysqld start      启动命令
+    # service mysqld stop       关闭命令
+    # service mysqld status     查看服务状态
+    # service mysqld restart    重启命令
+    
+CentOS 7 Python3.6和Pip3
+    参考文档：http://www.opsroad.com/1352.html
+    
+    1、安装依赖环境
+        yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+
+    2、下载Python3
+
+        mkdir -p /application/tools/
+        
+        cd /application/tools/
+
+        wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
+    3、安装python3
+        创建目录：
+        mkdir -p /usr/local/python3
+        
+        解压下载好的Python-3.x.x.tgz包
+        tar -xvf Python-3.6.5.tgz 
+
+4.进入解压后的目录，编译安装
+        cd Python-3.6.5
+        ./configure --prefix=/usr/local/python3
+        make install
+        
+        make && make install
+
+5.建立python3 和 pip3的软链
+        rm -fr /usr/bin/python
+        
+        ln -s /usr/local/python3/bin/python3 /usr/bin/python
+        
+        rm -fr /usr/bin/pip
+        
+        ln -s /usr/local/python3/bin/pip3 /usr/bin/pip
+
+检查Python3及pip3是否正常可用：
+    [root@beatz bin]# python -V
+        Python 3.6.5
+    [root@beatz bin]# pip -V
+        pip 9.0.3 from /usr/local/python3/lib/python3.6/site-packages (python 3.6)
+        
+创建虚拟环境：
+    1.安装：
+        pip install virtualenv 
+    
+    2.查看virtualenv的位置：
+        find / -name 'virtualenv.py'
+        
+        #/usr/local/python3/lib/python3.6/site-packages/virtualenv.py
+    
+    3.当前目录下新建虚拟环境：
+        [root@localhost ~]# python /usr/local/python3/lib/python3.6/site-packages/virtualenv.py myenv

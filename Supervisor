@@ -1,8 +1,10 @@
 nohup python test.py & 来保证其在后台运行不中断
-https://www.jianshu.com/p/484bd73f1e80
+c参考文档：https://www.jianshu.com/p/484bd73f1e80
+
 安装：
     pip install supervisor 只能使用python去安装
     sudo apt-get install supervisor
+
 把默认的配置生成到制定位置
     echo_supervisord_conf > /your_file_path/supervisord.conf
 
@@ -10,6 +12,7 @@ https://www.jianshu.com/p/484bd73f1e80
     配置文件最后一行
     [include]
     files = /etc/supervisor/conf.d/*.conf
+
 2.根据supervisor.conf配置的files在conf.d中新建.conf文件
     内容如下：
     [program:FileTransfer]
