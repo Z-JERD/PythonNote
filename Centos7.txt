@@ -43,6 +43,45 @@ Centos7中设置MySQL授权远程登录
     # service mysqld status     查看服务状态
     # service mysqld restart    重启命令
     
+    
+CentOS7安装Redis及设置密码
+	参考文档：https://www.cnblogs.com/rslai/p/8249812.html
+	1. yum install epel-release
+		若失败:
+			yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+	2.安装 Redis ： yum install redis 
+	
+	3.启动 redis ：
+		 启动redis：service redis start
+		 停止redis：service redis stop
+		 查看redis运行状态：service redis status
+		 查看redis进程：ps -ef | grep redis
+	
+	4.设置开机自动启动：chkconfig redis on 
+	
+	5.开放端口： firewall-cmd –zone=public –add-port=6379/tcp –permanent 
+	
+	6.应用防火墙设置：firewall-cmd –reload 
+	
+	7.配置远程连接及修改密码： 
+	(1).找到redis.conf配置文件的位置： whereis redis.config 
+	(2)如在etc/redis.conf，就进入etc目录：vim /etc/redis.conf 
+		找到下面这一行bind 127.0.0.1 
+		注释成 #bind 127.0.0.1（这样就能监听所有的IP地址）
+		protected-mode 要设置成no
+	(3)设置密码
+		找到下面这一行#requirepass foobared，去掉注释，并修改密码, 
+		requirepass dulixing（这样登录Redis的密码就更改为dulixing了） 
+
+
+源码安装redis：	
+	https://www.cnblogs.com/stulzq/p/9288401.html
+
+Centos7 执行firewall-cmd报错“ModuleNotFoundError: No module named 'gi'”
+	https://www.cnblogs.com/vixiaode/p/9939104.html
+    
+    
+    
 CentOS 7 Python3.6和Pip3
     参考文档：http://www.opsroad.com/1352.html
     
@@ -66,7 +105,6 @@ CentOS 7 Python3.6和Pip3
 4.进入解压后的目录，编译安装
         cd Python-3.6.5
         ./configure --prefix=/usr/local/python3
-        make install
         
         make && make install
 
@@ -96,3 +134,18 @@ CentOS 7 Python3.6和Pip3
     
     3.当前目录下新建虚拟环境：
         [root@localhost ~]# python /usr/local/python3/lib/python3.6/site-packages/virtualenv.py myenv
+        
+   
+ 	
+linux根分区满了怎么办?
+通过命令查找根分区内的大文件
+
+1.du -sh /* 2>/dev/null | sort -hr | head -3
+
+2.如果上述命令执行后发现/var/占空间最大，那么在查找/var分区内的大文件，如：
+
+	du -sh /var/* 2>/dev/null | sort -hr | head -3
+
+Linux 下清理系统缓存并释放内存
+	sync
+	echo 3 > /proc/sys/vm/drop_caches 
