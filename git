@@ -1,0 +1,365 @@
+'''
+git是一个用于帮助用户实现版本控制的软件
+
+1.在 Git 中的绝大多数操作都只需要访问本地文件和资源
+2.Git 一般只添加数据
+3.Git的三种状态：
+	1.已提交
+	2.已修改：没保存到数据库中
+	3.已暂存：对一个已修改文件的当前版本做了标记
+4.Git 项目的三个工作区域的概念：
+	1.Git 仓库：保存项目的元数据和对象数据库
+	2.工作目录：放在磁盘上供你使用或修改。
+	3.暂存区域：保存了下次将提交的文件列表信息，一般在 Git 仓库目录中
+基本的 Git 工作流程如下：
+	在工作目录中修改文件。
+	暂存文件，将文件的快照放入暂存区域。
+	提交更新，找到暂存区域的文件，将快照永久性存储到 Git 仓库目录。
+操作：
+	1.设置用户信息：
+		1.git config  --global user.name "zhaoguangfei"
+		2.git config  --global user.email "zhaoguangfei@qq.com"
+	2.文本编辑器 默认的是vim 如需更改
+		git config --global core.editor emacs
+	3.检查配置信息
+		git config --list
+		git config <key>： 来检查 Git 的某一项配置
+获取Git仓库：
+	1.现有项目或目录下导入所有文件到 Git
+	2.从一个服务器克隆一个现有的 Git 仓库
+	在现有目录中初始化仓库：
+	克隆现有的仓库:
+		1.比如，要克隆 Git 的可链接库 libgit2
+			git clone https://github.com/libgit2/libgit2
+			当前目录下创建一个名为 “libgit2” 的目录，并在这个目录下初始化一个 .git 文件夹，
+			所有数据放入 .git 文件夹
+		2.自定义本地仓库的名字：
+			$ git clone https://github.com/libgit2/libgit2 mylibgit
+			在本地创建的仓库名字变为 mylibgit。
+
+
+工作目录下的每一个文件都不外乎这两种状态：已跟踪或未跟踪
+	1.已跟踪:
+		指那些被纳入了版本控制的文件，在上一次快照中有它们的记录
+		在工作一段时间后,它们的状态可能处于未修改,已修改或已放入暂存区
+	2.未跟踪:不存在于上次快照的记录中，也没有放入暂存区
+	1.git init 初始化仓库 表示即将对当前文件夹进行版本控制
+	2.git status 检查当前文件状态
+		On branch master “master”,这是默认的分支名
+		git status -s 状态简览
+	3.git add
+		作用：
+			1.可以用它开始跟踪新文件并放到暂存区
+			2.把已跟踪的文件(修改后)放到暂存区
+		git add 文件名：跟踪新文件
+		此文件已被跟踪,并处于暂存状态
+		git add . 如果参数是目录的路径,跟踪该目录下的所有文件
+	4.忽略文件
+		日志文件，或者编译过程中创建的临时文件,不希望它们出现在未跟踪文件列表
+		创建一个名为 .gitignore 的文件，列出要忽略的文件模式
+		$ cat .gitignore
+		*.[oa] 忽略所有以 .o 或 .a 结尾的文件
+		*~  忽略所有以波浪符（~）结尾的文件
+	5.查看已暂存和未暂存的修改
+		1.git diff
+			查看尚未暂存的文件更新了哪些部分
+		2.git diff --cached
+			查看已暂存的将要添加到下次提交里的内容
+	6.提交更新
+		git commit
+		也可以在 commit 命令后添加 -m 选项，将提交信息与命令放在同一行
+		git commit -m "详细的描述信息"
+		git commit -m "Story 182: Fix benchmarks for speed"
+	7.git commit -a 跳过使用暂存区域
+		Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 git add 步骤
+	8.移除文件
+		要从 Git 中移除某个文件，就必须从暂存区域移除
+		1.git rm PROJECTS.md
+		2.删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f
+		git rm --cached README
+	9.重命名某个文件
+		git mv file_from  file_to
+查看提交历史：
+    1.git log 回顾下提交历史
+    2.git log -p 用来显示每次提交的内容差异 加上 -2 来仅显示最近两次提交
+    3. git log --start 提交的简略的统计信息
+    4. git log --pretty=oneline 每个提交放在一行显示
+    5.git log --pretty=format:"%h - %an, %ar : %s" 制要显示的记录格式
+    6.git log --pretty=format:"%h %s" --graph 形象地展示你的分支、合并历史
+    查询所有的提交历史：git reflog
+    限制输出长度：
+    1.git log --since=2.weeks 列出所有最近两周内的提交：
+撤消操作
+    1.git commit --amend  重新提交
+        提交后发现忘记了暂存某些需要的修改：
+        $ git commit -m 'initial commit'
+        $ git add forgotten_file  遗漏的文件名
+        $ git commit --amend
+         第二次提交将代替第一次提交的结果。
+    2.取消暂存的文件
+    git reset HEAD <file>... 来取消暂存
+        git reset HEAD CONTRIBUTING.md
+    git reset --hard 提交记录的版本号
+    3.撤消对文件的修改
+    还原成上次提交时的样子（或者刚克隆完的样子，或者刚把它放入工作目录时的样子）
+    git checkout -- CONTRIBUTING.md
+    文件的提交和撤销过程
+    原内容------修改过的内容-----暂存---------分支
+        -------->自动检测
+                    ---------->git add
+                                ---------->git commit
+                                <---------git reset --soft 版本号
+                <-------git reset head 文件
+    <-----git checkout 文件
+                <---------------------------git reset --mix 版本号
+    <---------------------------------------git reset --hard 版本号
+	git push -f origin master
+
+打标签：
+    Git 可以给历史中的某一个提交打上标签，以示重要
+    使用这个功能来标记发布结点（v1.0 等等）
+    1.列出标签 git tag
+    使用特定的模式查找标签
+    git tag -l 'v1.8.5*'
+    2.打标签：
+        创建轻量标签 $ git tag v0.1.2
+        创建附注标签  $ git tag -a v0.1.2 -m “0.1.2版本”
+    3.删除标签 $ git tag -d v0.1.2
+    4.补打标签： $ git tag -a v0.1.1 9fbc3d0(版本号)
+    5.tag推到远端分支：$ git push origin v0.1.2
+                    $ git push origin –tags # 将本地所有标签一次性提交到git服务器
+    6.删除远端的tag：git push origin --delete tag v0.1.2
+
+Git 别名
+    git config 文件来轻松地为每一个命令设置一个别名
+    1.$ git config --global alias.ci commit
+    要输入 git commit 时，只需要输入 git ci
+    2.向 Git 中添加你自己的取消暂存别名：
+    $ git config --global alias.unstage 'reset HEAD --'
+'''
+"""
+分支介绍：
+暂存操作：为每个文件计算校验和,然后会把当前版本的文件快照保存到Git中
+        将校验和加入到暂存区域等待提交
+commit提交时：Git 会先计算每一个子目录的校验和，然后在Git仓库中这些校验和保存为树对象。 
+            随后,Git便会创建一个提交对象，它除了包含上面提到的那些信息外,还包含指向这个树对象（项目根目录）的指针。
+例：一个工作目录,里面包含了三个将要被暂存和提交的文件,提交后
+Git 仓库中有五个对象：三个 blob 对象（保存着文件快照）、
+                    一个树对象（记录着目录结构和 blob 对象索引）
+                    一个提交对象（包含着指向前述树对象的指针和所有提交信息）
+修改后再次提交，那么这次产生的提交对象会包含一个指向上次提交对象（父对象）的指针。
+
+1.查看当前所有的分支：
+    $ git branch 默认的分支是master
+2.分支创建:
+   
+    2.创建一个可以移动的新的指针
+        Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
+        $ git branch testing 创建一个testing 分支。将当前分支中的代码全部拷到testing分支中
+3.分支切换:
+    HEAD 指向当前所在的分支
+    $ git checkout test1
+            HEAD 就指向 test1分支了。
+4.合并分支
+  Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
+  $ git merge test1 将test1分支中的代码合并到master中
+  也会发生冲突(更改了同一行数据)：手动处理
+5.删除分支：
+  $ git branch -d test1
+如果代码出现bug,你们是怎么解决的？
+    创建一个bug分支,在bug分支中处理,处理完毕后,合并到master分支
+    再把bug分支删除
+ git rebase的作用？
+	保持提交记录的整洁。
+"""
+
+"""
+常用命令:
+1.git stash 
+    帮助我们暂时存储已经开发一些功能的代码，继续做其他事情，做完之后，再回来继续开发
+  git stash pop 把开发的修改后,将放置在A的内容拿过来
+  pop时两种情况：1.自动合并
+                2.出现冲突：两个文件修改了同一行代码
+  
+    git stash           将当前工作区所有修改过的内容存储到“某个地方”，将工作区还原到当前版本未修改过的状态
+    git stash list      查看“某个地方”存储的所有记录
+    git stash clear     清空“某个地方”
+    git stash pop       将第一个记录从“某个地方”重新拿到工作区（可能有冲突）
+    git stash apply  编号 将指定编号记录从“某个地方”重新拿到工作区（可能有冲突） 
+    git stash drop   编号  删除指定编号的记录
+"""
+
+"""
+将代码提交到github或者其他代码库
+远程仓库的使用:
+    1.查看远程仓库
+        git remote 命令。 它会列出你指定的每一个远程服务器的简写
+         origin - 这是 Git 给你克隆的仓库服务器的默认名字：
+        git remote -v 显示需要读写远程仓库使用的 Git 保存的简写与其对应的 URL
+    2.添加远程仓库
+        在github新建个创库后,会程程一个url https://github.com/Z-JERD/demo.git
+        在git中为这个url起别名,这种对应关系会添加到config中
+        git remote add <shortname> <url> 添加一个新的远程 Git 仓库
+            git remote add origin https://github.com/Z-JERD/demo.git
+    3.推送到远程仓库
+        git push [remote-name] [branch-name]
+        1.推送master分支
+        Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
+        $ git push origin master
+        2.推送其他分支,先切换到指定的分支再推送
+        $ git checkout test1
+        $ git push origin test1
+    4.从远程仓库中抓取与拉取
+        1.从文件地址中下载,在git中cd demo 默认只下载master分支
+            git clone https://github.com/Z-JERD/demo.git
+                
+        2.拉取分支
+            1.先在本地创建分支
+                git branch test1
+            2.切换到这个分支
+                git checkout test1
+            3.git pull origin test1 一步到位
+                origin指向https://github.com/Z-JERD/demo.git 
+                clone时默认创建了这种指向
+             等同于：          git fetch origin test1
+                    还需要合并 git merge origin/test1
+					保持提交记录的整洁： git rebase origin/dev 
+	    或者：
+	        git clone -b dev https://github.com/Z-JERD/demo.git 
+    5.查看远程仓库的更多信息
+        git remote show [remote-name]
+        git remote show origin
+    6.远程仓库的移除与重命名
+        想要将 pb 重命名为 paul
+        1.git remote rename pb paul 引用 pb/master 的现在会引用 paul/master。
+        2.git remote rm paul
+
+"""
+#必掌握的命令
+"""
+提交相关：
+    1.git init
+    2.git status
+    3.git add .
+    4.git commit -m "描述"
+    5.git log
+    6.git reflog
+    7.git diff
+    8.git stash  git stash list
+    9.git stash pop
+撤销相关
+    1.git reset --soft 版本号
+    2.git reset --mix 版本号
+    3.git reset --hard 版本号
+    4.git reset head 文件
+    5.git checkout 文件
+分支相关
+    1.git branch
+    2.git branch test
+    3.git checkout test
+    4.git branch -d test
+    5.git merge test 冲突怎么解决？
+提交到代码托管
+    1. git remote
+    2. git remote add <shortname> <url>
+    3. git push origin master 
+    4. git clone https://github.com/Z-JERD/demo.git
+    5. git pull origin dev
+    6. git fetch origin dev  git merge origin/dev
+    7. git rebase origin/dev
+"""
+
+#githup中多人协同开发
+"""
+1.允许他人操作程序
+    1.合作者  settings---Collaborators
+    2.创建组织,更改组织成员的权限 new organization中创建
+2.master线上的分支,dev开发的分支
+每个人再各自创建自己的分支
+3.自己的代码写完合并到dev中时
+    1.需要切换到dev分支
+    2.在dev中合并自己的分支
+    3.再拉取远程库中的dev,会产生冲突
+    4.再提交dev
+4.代码review：
+新员工到公司中,写的代码不会直接合并到dev中
+而是需要创建个review分支,合并到review分支中,代码通过后再合并到dev中
+代码review的人：
+    1.组长
+    2.带你的师傅
+"""
+#如何给别人的代码贡献力量
+'''
+1.先fork将别人的代码放到自己的仓库
+2.修改测试无误后,pull request 发给对方
+'''
+#其他知识点
+'''
+1.避免反复的输入用户名和密码登录
+    1.https：add时添加用户名和密码
+         git remote add origin https://用户名：密码@github.com/Z-JERD/demo.git
+    2.ssh：公钥私钥认证
+        1.在git命令下输入：ssh-keygen.exe 一直回车
+        出现：
+            Your identification has been saved in /c/Users/Administrator/.ssh/id_rsa.
+            Your public key has been saved in /c/Users/Administrator/.ssh/id_rsa.pub.
+        2.找到ssh文件的打开,
+            $ ls
+            id_rsa  id_rsa.pub
+        3.获取公钥
+            $ cat id_rsa.pub
+        4.打开github放到settings中的ssh keys中
+        5.再clone的时候使用ssh
+         git remote add origin git@github.com:Z-JERD/DButils_mysql.git
+2.设置不需要管理的文件(.idea文件,数据库文件)
+    Git 忽略提交 .gitignore
+    比如日志，临时文件，编译的中间文件
+    vim .gitignore
+    写上*.ql *.py 文件 则以sql文件和py文件就不会被管理,会忽略
+    但是 .gitignore文件需交并上传
+    使用github可自动创建忽略文件
+    .gitignore只能忽略那些原来没有被track的文件,如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的。
+    解决方法就是先把本地缓存删除（改变成未track状态），然后再提交:
+    git rm -r --cached .
+    git add .
+    git commit -m 'update .gitignore'
+3.设置版本
+    git tag -a v1.0 -m '版本介绍'        本地创建Tag
+    git show v1.0                       查看
+    git tags -n                         查看本地Tag
+    git tag -d v1.0                     删除Tag
+    git checkout v.10                   切换tag
+    git push origin  --tags  上传到远程库
+    git pull origin  --tags  
+    git clone -b v0.1 https://github.com/Z-JERD/demo.git 拉取指定的版本
+    
+'''
+#github和gitlab的区别
+"""
+github 是一个基于git实现的在线代码仓库，包含一个网站界面，向互联网开放 
+gitlab 是一个基于git实现的在线代码仓库软件，可以用gitlab自己搭建一个类似于github一样的系统
+    并且允许免费设置私有仓库,允许用户选择分享一个project的部分代码
+"""
+
+#git rebase的详细解释
+"""
+用于修改还没有被提交到远程创库中的提交历史
+git rebase用于把一个分支的修改合并到当前分支,保持提交记录的整洁性
+1.假设你现在基于远程分支"origin"，创建一个叫"mywork"的分支
+  假设远程分支"origin"已经有了2个提交,这两个分支均指向这两个提交
+2.在mywork"的分支生成两个提交,在"origin"分支上也生成提交,此时这两个分支之间就分叉了
+3.使用git merge 会分叉
+4.使用 git rebase 
+命令会把你的"mywork"分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁
+然后把"mywork"分支更新 为最新的"origin"分支，最后把保存的这些补丁应用到"mywork"分支上
+那些老的提交会被丢弃
+使用rebase出现的问题：
+1.在rebase的过程中，也许会出现冲突(conflict)：
+Git会停止rebase并会让你去解决冲突,在解决完冲突后，用"git-add"命令去更新这些内容的索引(index), 然后,你无需执行 git-commit,只要执行:
+$ git rebase --continue
+终止rebase的行动，并且"mywork" 分支会回到rebase开始前的状态
+$ git rebase --abort
+"""
+
+
+
