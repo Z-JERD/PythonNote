@@ -115,20 +115,44 @@ git是一个用于帮助用户实现版本控制的软件
     <---------------------------------------git reset --hard 版本号
 	git push -f origin master
 
-打标签：
+
+标签操作：
     Git 可以给历史中的某一个提交打上标签，以示重要
     使用这个功能来标记发布结点（v1.0 等等）
-    1.列出标签 git tag
-    使用特定的模式查找标签
-    git tag -l 'v1.8.5*'
-    2.打标签：
-        创建轻量标签 $ git tag v0.1.2
-        创建附注标签  $ git tag -a v0.1.2 -m “0.1.2版本”
-    3.删除标签 $ git tag -d v0.1.2
-    4.补打标签： $ git tag -a v0.1.1 9fbc3d0(版本号)
-    5.tag推到远端分支：$ git push origin v0.1.2
-                    $ git push origin –tags # 将本地所有标签一次性提交到git服务器
-    6.删除远端的tag：git push origin --delete tag v0.1.2
+    
+    1.显示标签：
+            列出所有标签：               $ git tag
+            使用特定的模式查找标签       $  git tag -l 'v1.8.5*'
+   
+    2新建标签：
+            轻量级标签:                  $ git tag v1.4-lw
+            创建附注标签(推荐)           $ git tag -a v1.4
+            添加描述                     $ git tag -a v1.4 -m 'my version 1.4'
+            
+    3.补打标签：
+            默认标签是打在最新提交的commit上的 如果忘了打标签可以给指定的commit打标签
+            找到历史提交的commit id
+            $ git log --pretty=oneline --abbrev-commit
+                    6a5819e merged bug fix 101
+                    cc17032 fix bug 101
+                    7825a50 merge with no-ff
+                    
+            补打：$ git tag -a v0.1.1 7825a50 
+            
+    4.查看标签信息：
+            $ git show v1.4-lw
+            
+    5.将tag推到远端分支：
+                    $ git push origin v0.1.2
+                    $ git push origin –tags        # 将本地所有标签一次性提交到git服务器
+    
+    
+    6.删除本地tag： 
+            $ git tag -d v0.1.2
+    
+    7.删除远端的tag：
+            $ git push origin --delete tag v0.1.2
+	    
 
 Git 别名
     git config 文件来轻松地为每一个命令设置一个别名
