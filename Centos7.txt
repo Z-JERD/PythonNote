@@ -149,3 +149,7 @@ linux根分区满了怎么办?
 Linux 下清理系统缓存并释放内存
 	sync
 	echo 3 > /proc/sys/vm/drop_caches 
+	
+linux中删除目录下文件大小为0KB的文件
+	find . -name "*" -type f -size 0c | xargs -n 1 rm -f
+
