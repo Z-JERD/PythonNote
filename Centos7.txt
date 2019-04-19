@@ -190,3 +190,15 @@ linux中删除目录下文件大小为0KB的文件
 配置远程仓库：
     在自己的linux服务器本地生成ssh key：
         ssh-keygen -t rsa -C "zhaoguangfei@163.com"
+
+
+#########################pycharm远程上传文件到Linux#############################
+参考文档：https://blog.csdn.net/z_yong_cool/article/details/80716020
+
+1. 在PyCharm中打开SFTP配置面板，路径为Tools => Deployment => Configuration
+
+2. 配置Connection参数设置，填写远程服务器域名或者IP地址及用户名密码后，点击Test按钮进行连接测试，另外可以点击Autodetect按钮自动关联root path：
+
+3.配置Mappings参数设置，进行本地项目路径和远程服务器项目路径的关联：（圈红的是上传到Linux上的哪个文件下）
+
+4. 点击OK后，即可通过右键点击待操作文件进行本地、远程的Upload、Download及Sync
