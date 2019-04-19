@@ -1,7 +1,8 @@
 VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
 
-安装MySQL5.7
+#########################安装MySQL5.7#############################
+
     1.添加mysql源
         # rpm -Uvh http://repo.mysql.com//mysql57-community-release-el7-7.noarch.rpm
     2.安装mysql
@@ -23,6 +24,7 @@ VirtualBox下安装CentOS7系统
     
     MySQL数据库文件在/var/lib/mysql  配置文件在/etc/my.cnf
 
+
 Centos7中设置MySQL授权远程登录
     1.mysql> use mysql
     2.mysql> grant all privileges on *.* to 'root'@'%' identified by '12345';
@@ -43,8 +45,10 @@ Centos7中设置MySQL授权远程登录
     # service mysqld status     查看服务状态
     # service mysqld restart    重启命令
     
+
+
+#########################安装Redis及设置密码#############################
     
-CentOS7安装Redis及设置密码
 	参考文档：https://www.cnblogs.com/rslai/p/8249812.html
 	1. yum install epel-release
 		若失败:
@@ -81,8 +85,8 @@ Centos7 执行firewall-cmd报错“ModuleNotFoundError: No module named 'gi'”
 	https://www.cnblogs.com/vixiaode/p/9939104.html
     
     
-    
-CentOS 7 Python3.6和Pip3
+#########################CentOS 7 Python3.6和Pip3#############################
+
     参考文档：http://www.opsroad.com/1352.html
     
     1、安装依赖环境
@@ -136,8 +140,7 @@ CentOS 7 Python3.6和Pip3
         [root@localhost ~]# python /usr/local/python3/lib/python3.6/site-packages/virtualenv.py myenv
         
    
- 	
-linux根分区满了怎么办?
+#########################linux根分区满了怎么办?############################# 	
 通过命令查找根分区内的大文件
 
 1.du -sh /* 2>/dev/null | sort -hr | head -3
