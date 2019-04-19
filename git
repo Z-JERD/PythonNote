@@ -54,6 +54,38 @@
         4.git commit -m 'add gitignore file'
         
         5.git push 
+	
+    4.忽略特殊文件：
+	    在Windows下进行Python开发，Windows会自动在有图片的目录下生成隐藏的缩略图文件，如果有自定义目录，目录下就会有Desktop.ini文件，因此你需要忽略Windows自动生成的垃圾文件：
+	    Python编译会产生.pyc、.pyo、dist 等文件或目录
+	    定义一个完整的.gitignore文件，内容如下：
+		# Windows:
+		Thumbs.db
+		ehthumbs.db
+		Desktop.ini
+
+		# Python:
+		*.py[cod]
+		*.so
+		*.egg
+		*.egg-info
+		dist
+		build
+		.idea
+
+		# My configurations:
+		db.ini
+		deploy_key_rsa
+
+	    有些时候，你想添加一个文件到Git，但发现添加不了，原因是这个文件被.gitignore忽略了：
+
+		$ git add App.class
+		The following paths are ignored by one of your .gitignore files:
+		App.class
+		Use -f if you really want to add them.
+
+	    如果你确实想添加该文件，可以用-f强制添加到Git：
+		$ git add -f App.class
 
 ####################################标签操作：####################################################
     
