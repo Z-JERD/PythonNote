@@ -1,3 +1,136 @@
+
+#########################################git 提交代码步骤：########################################################
+    
+    1. git clone https://gitlab.huayingjuhe.com/DevGroup/wsgi-slp.git
+       默认获取主分支的代码
+       获取dev分支的代码： git clone -b dev https://github.com/Z-JERD/demo.git
+    
+    2. git status
+        修改后查看状态 如果显示的有.idea目录, 手动删除.idea目录
+
+    3.git add . 
+        提交所有修改的和新建的数据暂存区
+        
+        git add demo.py     指定跟踪的文件
+        git add .           提交所有修改的和新建的数据暂存区
+        git add -u          提交所有被删除和修改的文件到数据暂存区
+        git add -A          提交所有被删除、被替换、被修改和新增的文件到数据暂存区
+        
+    4.再次检测 git status
+    
+    5.git commit -m “modify”
+        将修改从暂存区提交到本地版本库（
+        
+    6.git pull origin master
+        从远程获取最新版本并merge到本地
+    
+    7.git push origin master
+        将本地版本库的分支推送到远程服务器上对应的分支
+
+
+####################################解决提交的文件中的.idea####################################################
+    
+    查看当前目录下所有的文件(包括隐藏文件)：la -a
+    1.若idea目录已提交到远程仓库中 git删除远程.idea目录
+        1.删除缓存区.idea
+            $ git rm --cached -r .idea
+        2.将.idea从源代码仓库中删除
+            $ git commit -m "commit and remove .idea"
+        3.推送到远程端
+            $ git push origin master
+    
+    2.git add 之前查看先git status 如果有idea目录,在当前文件下手动删除.idea目录
+    
+    3.使用忽略文件
+        1.打开项目的目录,执行命令：
+             $ touch .gitignore  在文件夹就生成了一个“.gitignore”文件
+             
+        2.编辑.gitignore
+            $ vim .gitignore
+            添加： .idea
+            
+        3.git add .gitignore    提交到暂存区
+        
+        4.git commit -m 'add gitignore file'
+        
+        5.git push 
+
+####################################标签操作：####################################################
+    
+    Git 可以给历史中的某一个提交打上标签，以示重要
+    使用这个功能来标记发布结点（v1.0 等等）
+    
+    1.显示标签：
+            列出所有标签：               $ git tag
+            使用特定的模式查找标签       $  git tag -l 'v1.8.5*'
+   
+    2新建标签：
+            轻量级标签:                  $ git tag v1.4-lw
+            创建附注标签(推荐)           $ git tag -a v1.4
+            添加描述                     $ git tag -a v1.4 -m 'my version 1.4'
+            
+    3.补打标签：
+            默认标签是打在最新提交的commit上的 如果忘了打标签可以给指定的commit打标签
+            找到历史提交的commit id
+            $ git log --pretty=oneline --abbrev-commit
+                    6a5819e merged bug fix 101
+                    cc17032 fix bug 101
+                    7825a50 merge with no-ff
+                    
+            补打：$ git tag -a v0.1.1 7825a50 
+            
+    4.查看标签信息：
+            $ git show v1.4-lw
+            
+    5.将tag推到远端分支：
+                    $ git push origin v0.1.2
+                    $ git push origin –tags        # 将本地所有标签一次性提交到git服务器
+    
+    
+    6.删除本地tag： 
+            $ git tag -d v0.1.2
+    
+    7.删除远端的tag：
+            $ git push origin --delete tag v0.1.2   
+	    
+####################################分支介绍####################################################
+
+    暂存操作：为每个文件计算校验和,然后会把当前版本的文件快照保存到Git中
+            将校验和加入到暂存区域等待提交
+    commit提交时：Git 会先计算每一个子目录的校验和，然后在Git仓库中这些校验和保存为树对象。 
+                随后,Git便会创建一个提交对象，它除了包含上面提到的那些信息外,还包含指向这个树对象（项目根目录）的指针。
+    例：一个工作目录,里面包含了三个将要被暂存和提交的文件,提交后
+    Git 仓库中有五个对象：三个 blob 对象（保存着文件快照）、
+                        一个树对象（记录着目录结构和 blob 对象索引）
+                        一个提交对象（包含着指向前述树对象的指针和所有提交信息）
+    修改后再次提交，那么这次产生的提交对象会包含一个指向上次提交对象（父对象）的指针。
+    
+    1.查看当前所有的分支：
+        $ git branch 默认的分支是master
+    
+    2.分支创建:
+            创建一个可以移动的新的指针
+            Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
+            $ git branch testing 创建一个testing 分支。将当前分支中的代码全部拷到testing分支中
+    
+    3.分支切换:
+        HEAD 指向当前所在的分支
+        $ git checkout test1
+                HEAD 就指向 test1分支了。
+    4.合并分支
+      Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
+      $ git merge test1 将test1分支中的代码合并到master中
+      也会发生冲突(更改了同一行数据)：手动处理
+    
+    5.删除分支：
+      $ git branch -d test1
+    
+    如果代码出现bug,你们是怎么解决的？
+        创建一个bug分支,在bug分支中处理,处理完毕后,合并到master分支
+        再把bug分支删除
+     git rebase的作用？
+        保持提交记录的整洁。
+
 '''
 git是一个用于帮助用户实现版本控制的软件
 
@@ -116,42 +249,7 @@ git是一个用于帮助用户实现版本控制的软件
 	git push -f origin master
 
 
-标签操作：
-    Git 可以给历史中的某一个提交打上标签，以示重要
-    使用这个功能来标记发布结点（v1.0 等等）
-    
-    1.显示标签：
-            列出所有标签：               $ git tag
-            使用特定的模式查找标签       $  git tag -l 'v1.8.5*'
-   
-    2新建标签：
-            轻量级标签:                  $ git tag v1.4-lw
-            创建附注标签(推荐)           $ git tag -a v1.4
-            添加描述                     $ git tag -a v1.4 -m 'my version 1.4'
-            
-    3.补打标签：
-            默认标签是打在最新提交的commit上的 如果忘了打标签可以给指定的commit打标签
-            找到历史提交的commit id
-            $ git log --pretty=oneline --abbrev-commit
-                    6a5819e merged bug fix 101
-                    cc17032 fix bug 101
-                    7825a50 merge with no-ff
-                    
-            补打：$ git tag -a v0.1.1 7825a50 
-            
-    4.查看标签信息：
-            $ git show v1.4-lw
-            
-    5.将tag推到远端分支：
-                    $ git push origin v0.1.2
-                    $ git push origin –tags        # 将本地所有标签一次性提交到git服务器
-    
-    
-    6.删除本地tag： 
-            $ git tag -d v0.1.2
-    
-    7.删除远端的tag：
-            $ git push origin --delete tag v0.1.2
+
 	    
 
 Git 别名
@@ -161,57 +259,7 @@ Git 别名
     2.向 Git 中添加你自己的取消暂存别名：
     $ git config --global alias.unstage 'reset HEAD --'
 '''
-"""
-分支介绍：
-暂存操作：为每个文件计算校验和,然后会把当前版本的文件快照保存到Git中
-        将校验和加入到暂存区域等待提交
-commit提交时：Git 会先计算每一个子目录的校验和，然后在Git仓库中这些校验和保存为树对象。 
-            随后,Git便会创建一个提交对象，它除了包含上面提到的那些信息外,还包含指向这个树对象（项目根目录）的指针。
-例：一个工作目录,里面包含了三个将要被暂存和提交的文件,提交后
-Git 仓库中有五个对象：三个 blob 对象（保存着文件快照）、
-                    一个树对象（记录着目录结构和 blob 对象索引）
-                    一个提交对象（包含着指向前述树对象的指针和所有提交信息）
-修改后再次提交，那么这次产生的提交对象会包含一个指向上次提交对象（父对象）的指针。
 
-1.查看当前所有的分支：
-    $ git branch 默认的分支是master
-2.分支创建:
-   
-    2.创建一个可以移动的新的指针
-        Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
-        $ git branch testing 创建一个testing 分支。将当前分支中的代码全部拷到testing分支中
-3.分支切换:
-    HEAD 指向当前所在的分支
-    $ git checkout test1
-            HEAD 就指向 test1分支了。
-4.合并分支
-  Administrator@DESKTOP-ALPER9P MINGW64 ~/Desktop/MySql TEST (master)
-  $ git merge test1 将test1分支中的代码合并到master中
-  也会发生冲突(更改了同一行数据)：手动处理
-5.删除分支：
-  $ git branch -d test1
-如果代码出现bug,你们是怎么解决的？
-    创建一个bug分支,在bug分支中处理,处理完毕后,合并到master分支
-    再把bug分支删除
- git rebase的作用？
-	保持提交记录的整洁。
-"""
-
-"""
-常用命令:
-1.git stash 
-    帮助我们暂时存储已经开发一些功能的代码，继续做其他事情，做完之后，再回来继续开发
-  git stash pop 把开发的修改后,将放置在A的内容拿过来
-  pop时两种情况：1.自动合并
-                2.出现冲突：两个文件修改了同一行代码
-  
-    git stash           将当前工作区所有修改过的内容存储到“某个地方”，将工作区还原到当前版本未修改过的状态
-    git stash list      查看“某个地方”存储的所有记录
-    git stash clear     清空“某个地方”
-    git stash pop       将第一个记录从“某个地方”重新拿到工作区（可能有冲突）
-    git stash apply  编号 将指定编号记录从“某个地方”重新拿到工作区（可能有冲突） 
-    git stash drop   编号  删除指定编号的记录
-"""
 
 """
 将代码提交到github或者其他代码库
