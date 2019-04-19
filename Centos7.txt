@@ -153,3 +153,37 @@ Linux 下清理系统缓存并释放内存
 linux中删除目录下文件大小为0KB的文件
 	find . -name "*" -type f -size 0c | xargs -n 1 rm -f
 
+
+
+#########################CentOS7 yum 安装git#############################
+
+使用yum命令报错：SyntaxError: invalid syntax
+
+问题出现原因： 
+    yum包管理是使用python2.x写的，将python2.x升级到python3.x以后，由于python版本语法兼容性导致问题出现 
+
+解决办法： 
+    修改yum配置文件，将python版本指向以前的旧版本
+    
+    # vi /usr/bin/yum
+    #!/usr/bin/python2.7
+    修改urlgrabber-ext-down文件，更改python版本
+    
+    # vi /usr/libexec/urlgrabber-ext-down
+    #!/usr/bin/python2.7
+    
+安装git：
+    yum install -y git
+    
+查看是否成功安装git：
+    git --version
+
+配置git：
+    git config --global user.name "zhaoguangfei"
+    git config --global user.email "zhaoguangfei@163.com"
+    查看配置是否生效：
+        git config --list
+   
+配置远程仓库：
+    在自己的linux服务器本地生成ssh key：
+        ssh-keygen -t rsa -C "zhaoguangfei@163.com"
