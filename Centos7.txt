@@ -202,3 +202,18 @@ linux中删除目录下文件大小为0KB的文件
 3.配置Mappings参数设置，进行本地项目路径和远程服务器项目路径的关联：（圈红的是上传到Linux上的哪个文件下）
 
 4. 点击OK后，即可通过右键点击待操作文件进行本地、远程的Upload、Download及Sync
+
+
+#########################进程管理#############################
+1.获取某个服务的进程号：
+    [root@99 zhaoguangfei]# ps -ef | grep slide
+    root      499783       1  0 4月19 ?       00:00:12 uwsgi -y slp.yaml:slide
+    root      499790  499783  0 4月19 ?       00:01:36 uwsgi -y slp.yaml slide
+    root      707362  706210  0 11:15 pts/8    00:00:00 grep --color=auto slide
+    
+    slide服务的PID为499783
+    
+2.查看该进程的启动文件所在目录
+    [root@99 zhaoguangfei]# ls -ll /proc/499783
+    lrwxrwxrwx 1 root root 0 4月  22 11:11 cwd -> /home/zhaoguangfei/wsgi-slp
+    cwd所指即工作目录
