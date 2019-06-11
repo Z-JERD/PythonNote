@@ -1,7 +1,7 @@
 VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
 
-#########################安装MySQL5.7#############################
+#安装MySQL5.7
 
     1.添加mysql源
         # rpm -Uvh http://repo.mysql.com//mysql57-community-release-el7-7.noarch.rpm
@@ -47,8 +47,7 @@ VirtualBox下安装CentOS7系统
     # service mysqld restart    重启命令
     
 
-
-#########################安装Redis及设置密码#############################
+#安装Redis及设置密码
     
 	参考文档：https://www.cnblogs.com/rslai/p/8249812.html
 	1. yum install epel-release
@@ -86,7 +85,8 @@ VirtualBox下安装CentOS7系统
         https://www.cnblogs.com/vixiaode/p/9939104.html
     
     
-#########################CentOS 7 Python3.6和Pip3#############################
+    
+#CentOS 7 Python3.6和Pip3
 
     参考文档：http://www.opsroad.com/1352.html
     
@@ -141,8 +141,9 @@ VirtualBox下安装CentOS7系统
         [root@localhost ~]# python /usr/local/python3/lib/python3.6/site-packages/virtualenv.py myenv
         
    
-#########################linux根分区满了怎么办?############################# 	
-### 通过命令查找根分区内的大文件
+   
+#linux根分区满了怎么办?
+##通过命令查找根分区内的大文件
 
     1.du -sh /* 2>/dev/null | sort -hr | head -3
     
@@ -150,16 +151,14 @@ VirtualBox下安装CentOS7系统
 
 	    du -sh /var/* 2>/dev/null | sort -hr | head -3
 
-### Linux 下清理系统缓存并释放内存
+## Linux 下清理系统缓存并释放内存
 	sync
 	echo 3 > /proc/sys/vm/drop_caches 
 	
-### linux中删除目录下文件大小为0KB的文件
+## linux中删除目录下文件大小为0KB的文件
 	find . -name "*" -type f -size 0c | xargs -n 1 rm -f
 
-
-
-#########################CentOS7 yum 安装git#############################
+#CentOS7 yum 安装git
 
     使用yum命令报错：SyntaxError: invalid syntax
     
@@ -193,7 +192,7 @@ VirtualBox下安装CentOS7系统
             ssh-keygen -t rsa -C "zhaoguangfei@163.com"
 
 
-#########################pycharm远程上传文件到Linux#############################
+#pycharm远程上传文件到Linux
     参考文档：https://blog.csdn.net/z_yong_cool/article/details/80716020
     
     1. 在PyCharm中打开SFTP配置面板，路径为Tools => Deployment => Configuration
@@ -205,7 +204,7 @@ VirtualBox下安装CentOS7系统
     4. 点击OK后，即可通过右键点击待操作文件进行本地、远程的Upload、Download及Sync
 
 
-#########################进程管理#############################
+#进程管理
     1.获取某个服务的进程号：
         [root@99 zhaoguangfei]# ps -ef | grep slide
         root      499783       1  0 4月19 ?       00:00:12 uwsgi -y slp.yaml:slide
@@ -218,3 +217,149 @@ VirtualBox下安装CentOS7系统
         [root@99 zhaoguangfei]# ls -ll /proc/499783
         lrwxrwxrwx 1 root root 0 4月  22 11:11 cwd -> /home/zhaoguangfei/wsgi-slp
         cwd所指即工作目录
+
+#Centos下Nginx操作
+##nginx命令
+
+    yum -y install nginx                安装Nginx
+	systemctl start nginx               开启nginx服务
+	systemctl stop nginx                停止nginx服务
+	systemctl restart nginx             重启nginx服务
+	nginx -t                            查看nignx服务的状态
+	cat /var/log/nginx/error.log        查看错误日志
+
+	
+##Linux下如何查看定位当前正在运行的Nginx的配置文件
+    1. 查看nginx的PID，以常用的80端口为例：
+        [root@xiaoyuer scripts]# netstat -lntup|grep 80
+        tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13309/nginx
+     
+        可以知道nginx进程是13309
+    2. 通过相应的进程ID(比如：13309）查询当前运行的nginx路径：
+        [root@xiaoyuer scripts]# ll /proc/13309/exe
+        lrwxrwxrwx. 1 root root 0 Jun  4 19:37 /proc/10174/exe -> /usr/sbin/nginx
+    
+    3. 获取到nginx的执行路径后，使用-t参数即可获取该进程对应的配置文件路径，如：
+        [root@localhost ~]# /usr/sbin/nginx -t
+        nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+        nginx: configuration file /etc/nginx/nginx.conf test is successful
+        
+##Nginx和Uwsgi联合使用
+	
+###1.uwsgi自定义端口号启动
+	uwsgi配置文件使用yaml格式
+	flask_demo.yaml
+		flask_demo:
+		  wsgi-file: app.py
+		  socket: 127.0.0.1:8001
+		  pidfile: /var/wsgi/flask_demo.pid
+		  daemonize: /var/wsgi/flask_demo.log
+		  
+	启动服务：uwsgi -y flask_demo.yaml:flask_demo
+	查看服务日志：tail -f /var/wsgi/flask_demo.log
+	
+	nginx配置：添加以下内容
+	server {
+			listen      80; 
+			server_name   _;
+			location / { 
+				
+				 include         uwsgi_params;
+				 uwsgi_pass      127.0.0.1:8001;
+			}  
+
+	    } 
+
+###2.uwsgi定义socket文件启动
+	flask_demo:
+			  wsgi-file: app.py
+			  socket: /var/wsgi/flask_demo.socket
+			  pidfile: /var/wsgi/flask_demo.pid
+			  daemonize: /var/wsgi/flask_demo.log
+			  
+	配置Nginx：
+	server {
+                        listen      9000;
+                        server_name   _;
+                        location / {
+							 include         uwsgi_params;
+							 uwsgi_pass      unix:/var/wsgi/flask_demo.socket;
+                        }
+
+            }
+            
+    Nginx报错：connect() to unix:/var/wsgi/flask_demo.socket failed (111: Connection refused)
+    解决方案：
+    	修改Nginx的配置文件 vim /etc/nginx/nginx.conf：
+    	前几行的内容如下：
+			user nginx;
+			worker_processes auto;
+			error_log /var/log/nginx/error.log;
+			pid /run/nginx.pid;
+
+    	将user nginx; 改为user root;
+
+
+###3.Nginx中一个server配置多个服务
+	uwsgi配置文件
+		flask_demo:
+		  wsgi-file: app.py
+		  socket: /var/wsgi/flask_demo.socket
+		  #http: 0.0.0.0:8000
+		  pidfile: /var/wsgi/flask_demo.pid
+		  daemonize: /var/wsgi/flask_demo.log
+	
+		secondary:
+		  wsgi-file: secondary.py
+		  socket: /var/wsgi/secondary.socket
+		  pidfile: /var/wsgi/secondary.pid
+		  daemonize: /var/wsgi/secondary.log
+		  
+	Nginx服务配置:
+		url以index开头请求发到flask_demo这个服务中
+			以secondary开头的请求发到secondary这个服务中
+	
+		server {
+					
+					listen      9000; 
+					server_name   _;
+					location /index { 
+						
+						 include 	 uwsgi_params;
+						 uwsgi_pass      unix:/var/wsgi/flask_demo.socket;
+					}
+		
+					location /secondary {
+										
+										 include         uwsgi_params;
+										 uwsgi_pass      unix:/var/wsgi/secondary.socket;
+								}  
+		
+		
+				} 
+
+
+
+##启动Nginx报错:
+	connect() to 127.0.0.1:8001 failed (13: Permission denied)
+
+###解决方法：
+	1.查看SELinux状态：
+		/usr/sbin/sestatus -v ##如果SELinux status参数为enabled即为开启状态
+		getenforce ##也可以检查
+		SELinux status: enabled
+		关闭SELinux：
+	
+	2.关闭SELinux：
+		1、临时关闭（不用重启机器）：
+		
+		setenforce 0 ##设置SELinux 成为permissive模式
+		
+		##setenforce 1 设置SELinux 成为enforcing模式
+		
+		2、修改配置文件需要重启机器：
+		
+		修改/etc/selinux/config 文件
+		
+		将SELINUX=enforcing改为SELINUX=disabled
+
