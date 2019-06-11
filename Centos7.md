@@ -1,7 +1,7 @@
 VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
 
-#安装MySQL5.7
+# 安装MySQL5.7
 
     1.添加mysql源
         # rpm -Uvh http://repo.mysql.com//mysql57-community-release-el7-7.noarch.rpm
@@ -47,7 +47,7 @@ VirtualBox下安装CentOS7系统
     # service mysqld restart    重启命令
     
 
-#安装Redis及设置密码
+# 安装Redis及设置密码
     
 	参考文档：https://www.cnblogs.com/rslai/p/8249812.html
 	1. yum install epel-release
@@ -86,7 +86,7 @@ VirtualBox下安装CentOS7系统
     
     
     
-#CentOS 7 Python3.6和Pip3
+# CentOS 7 Python3.6和Pip3
 
     参考文档：http://www.opsroad.com/1352.html
     
@@ -142,8 +142,8 @@ VirtualBox下安装CentOS7系统
         
    
    
-#linux根分区满了怎么办?
-##通过命令查找根分区内的大文件
+# linux根分区满了怎么办?
+## 通过命令查找根分区内的大文件
 
     1.du -sh /* 2>/dev/null | sort -hr | head -3
     
@@ -158,7 +158,7 @@ VirtualBox下安装CentOS7系统
 ## linux中删除目录下文件大小为0KB的文件
 	find . -name "*" -type f -size 0c | xargs -n 1 rm -f
 
-#CentOS7 yum 安装git
+# CentOS7 yum 安装git
 
     使用yum命令报错：SyntaxError: invalid syntax
     
@@ -192,7 +192,7 @@ VirtualBox下安装CentOS7系统
             ssh-keygen -t rsa -C "zhaoguangfei@163.com"
 
 
-#pycharm远程上传文件到Linux
+# pycharm远程上传文件到Linux
     参考文档：https://blog.csdn.net/z_yong_cool/article/details/80716020
     
     1. 在PyCharm中打开SFTP配置面板，路径为Tools => Deployment => Configuration
@@ -204,7 +204,7 @@ VirtualBox下安装CentOS7系统
     4. 点击OK后，即可通过右键点击待操作文件进行本地、远程的Upload、Download及Sync
 
 
-#进程管理
+# 进程管理
     1.获取某个服务的进程号：
         [root@99 zhaoguangfei]# ps -ef | grep slide
         root      499783       1  0 4月19 ?       00:00:12 uwsgi -y slp.yaml:slide
@@ -218,8 +218,8 @@ VirtualBox下安装CentOS7系统
         lrwxrwxrwx 1 root root 0 4月  22 11:11 cwd -> /home/zhaoguangfei/wsgi-slp
         cwd所指即工作目录
 
-#Centos下Nginx操作
-##nginx命令
+# Centos下Nginx操作
+## nginx命令
 
     yum -y install nginx                安装Nginx
 	systemctl start nginx               开启nginx服务
@@ -229,7 +229,7 @@ VirtualBox下安装CentOS7系统
 	cat /var/log/nginx/error.log        查看错误日志
 
 	
-##Linux下如何查看定位当前正在运行的Nginx的配置文件
+## Linux下如何查看定位当前正在运行的Nginx的配置文件
     1. 查看nginx的PID，以常用的80端口为例：
         [root@xiaoyuer scripts]# netstat -lntup|grep 80
         tcp        0      0 0.0.0.0:80                  0.0.0.0:*                   LISTEN      13309/nginx
@@ -244,9 +244,9 @@ VirtualBox下安装CentOS7系统
         nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
         nginx: configuration file /etc/nginx/nginx.conf test is successful
         
-##Nginx和Uwsgi联合使用
+## Nginx和Uwsgi联合使用
 	
-###1.uwsgi自定义端口号启动
+### 1.uwsgi自定义端口号启动
 	uwsgi配置文件使用yaml格式
 	flask_demo.yaml
 		flask_demo:
@@ -270,7 +270,7 @@ VirtualBox下安装CentOS7系统
 
 	    } 
 
-###2.uwsgi定义socket文件启动
+### 2.uwsgi定义socket文件启动
 	flask_demo:
 			  wsgi-file: app.py
 			  socket: /var/wsgi/flask_demo.socket
@@ -300,7 +300,7 @@ VirtualBox下安装CentOS7系统
     	将user nginx; 改为user root;
 
 
-###3.Nginx中一个server配置多个服务
+### 3.Nginx中一个server配置多个服务
 	uwsgi配置文件
 		flask_demo:
 		  wsgi-file: app.py
@@ -340,10 +340,10 @@ VirtualBox下安装CentOS7系统
 
 
 
-##启动Nginx报错:
+## 启动Nginx报错:
 	connect() to 127.0.0.1:8001 failed (13: Permission denied)
 
-###解决方法：
+### 解决方法：
 	1.查看SELinux状态：
 		/usr/sbin/sestatus -v ##如果SELinux status参数为enabled即为开启状态
 		getenforce ##也可以检查
