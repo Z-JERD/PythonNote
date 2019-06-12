@@ -1,5 +1,6 @@
 nohup python test.py & 来保证其在后台运行不中断
-c参考文档：https://www.jianshu.com/p/484bd73f1e80
+参考文档：
+    https://www.jianshu.com/p/484bd73f1e80
 
 安装：
     pip install supervisor 只能使用python去安装
