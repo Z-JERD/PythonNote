@@ -12,6 +12,7 @@ VirtualBox下安装CentOS7系统
         # service mysqld start
     4.检查mysql服务状态
         # service mysqld status
+## 密码设置    
     第一次启动mysql，会在日志文件中生成root用户的一个随机密码，使用下面命令查看该密码
         # grep 'temporary password' /var/log/mysqld.log
     设置新密码：
@@ -25,26 +26,44 @@ VirtualBox下安装CentOS7系统
     MySQL数据库文件在/var/lib/mysql  配置文件在/etc/my.cnf
 
 
-     Centos7中设置MySQL授权远程登录
-        1.mysql> use mysql
-        2.mysql> grant all privileges on *.* to 'root'@'%' identified by '12345';
-                 使用root:12345来外部访问
-        3.刷新权限:
-            mysql> flush privileges;
-        4.开放端口
-            [root@localhost /]# vim /etc/sysconfig/iptables
-                添加一下内容：
-                    -A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT
-        5.关闭防火墙：
-            systemctl stop firewalld.service
-            禁止firewall开机启动：systemctl disable firewalld.service 
-    
-    
+## Centos7中设置MySQL授权远程登录
+    1.mysql> use mysql
+    2.mysql> grant all privileges on *.* to 'root'@'%' identified by '12345';
+             使用root:12345来外部访问
+    3.刷新权限:
+        mysql> flush privileges;
+    4.开放端口
+        [root@localhost /]# vim /etc/sysconfig/iptables-config 
+            添加一下内容：
+                -A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT
+    5.关闭防火墙：
+        systemctl stop firewalld.service
+        禁止firewall开机启动：systemctl disable firewalld.service 
+
+## MySQL服务相关命令   
     启动、关闭、重启、查看MySQL服务
     # service mysqld start      启动命令
     # service mysqld stop       关闭命令
     # service mysqld status     查看服务状态
     # service mysqld restart    重启命令
+    
+## Linux中登录MySQL数据库
+### 1.简洁登录 只登录本服务器的MySQL
+    mysql -uroot -p
+    
+### 2.登录其他服务器上的MySQL
+    mysql -hlocalhost -uroot -p -P3306
+    
+    -h数据库主库
+    -u用户
+    -p密码
+    -P端口号（大写P）
+    
+    例如：mysql -h127.0.0.1 -uroot -p123456 -P3306
+          PS:-p密码部分，可以直接指定密码，如果不指定，会提示输入密码
+    登录其他服务器：
+           mysql -h10.110.1.90 -uphp -p -P3307
+
     
 
 # 安装Redis及设置密码
