@@ -1,5 +1,140 @@
-VirtualBox下安装CentOS7系统
+## VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
+    
+# Linux基本操作命令
+### 查看当前系统的版本和内核：
+        1.版本信息
+            [root@99 zhaoguangfei]# cat /etc/centos-release
+
+        2.内核信息：
+            [root@99 zhaoguangfei]# uname -r 
+            
+### centos7没有ifconfig命令：
+      [root@99 zhaoguangfei]# yum search ifconfig
+        显示： net-tools.x86_64 ：Basic networkin tools
+      安装：
+         yum install net-tools.x86_64
+     或者使用 ip addr 查询ip信息
+     
+     
+     
+### 查看端口：
+    netstat -tunlp | grep 80
+            
+### rpm查看安装的软件：
+    rpm -qa     查看全部的软件
+    rpm -qa     软件名 例：[root@99 zhaoguangfei]# rpm -qa lrzsz 
+    
+### 安装rzsz：
+    yum -y install lrzsz
+        windows ===== >  linux    上传    rz 
+        linux   ===== >  windows  下载    sz 
+        
+### 显示目录或文件的大小：
+     1.du 显示指定的目录或文件所占用的磁盘空间
+          [root@99 zhaoguangfei]# du            只显示当前目录下面的子目录的目录大小和当前目录的总的大小，最下面的为当前目录的总大小
+          [root@99 zhaoguangfei]# du -h test    方便阅读的格式显示test目录各文件所占空间情况
+          du -sh [目录/文件名]                  返回该目录/文件的总大小
+          du -sh ./* 　　                       统计当前目录各文件夹总大小
+          
+     2.df
+        df -hl              查看磁盘剩余空间
+        df -h               查看每个根路径的分区大小
+        sudo fdisk -l       查看硬盘的分区 
+     3.free -h 　           查看内存大小
+  
+ 
+### Linux 系统中查找最大的前 10 个文件
+    find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 10
+
+        find：在目录结构中搜索文件的命令
+        /：在整个系统（从根目录开始）中查找
+        -type：指定文件类型
+        f：普通文件
+        -print0：在标准输出显示完整的文件名，其后跟一个空字符（null）
+        |：控制操作符，将一条命令的输出传递给下一个命令以供进一步处理
+        xargs：将标准输入转换成命令行参数的命令
+        -0：以空字符（null）而不是空白字符（LCTT 译者注：即空格、制表符和换行）来分割记录
+        du -h：以可读格式计算磁盘空间使用情况的命令
+        sort：对文本文件进行排序的命令
+        -r：反转结果
+        -h：用可读格式打印输出
+        head：输出文件开头部分的命令
+        n -10：打印前 10 个文件
+    
+    找出当前目录下大于1M的文件
+        find . -type f -size +1000k  -print0 | xargs -0 du -h | sort -rh
+
+
+
+    
+### 文件的查找命令：which/whereis/locate/find
+
+    1.which
+        which命令的作用是，在PATH变量指定的路径中，搜索某个系统命令的位置
+        [root@virtue ~]# which cd
+            /usr/bin/菜刀
+    2.whereis	查看可执行文件的位置及相关文件
+        whereis命令只能用于程序名的搜索，而且只搜索二进制文件（参数-b）、man说明文件（参数-m）和源代码文件（参数-s）
+        1.查找二进制文件
+            [root@virtue ~]# whereis -b git
+            git: /usr/bin/git
+            
+        2.查找帮助文件
+            [root@virtue ~]# whereis -m git
+            git: /usr/握手/man/man1/git.1.gz
+            
+        3.普通查找
+            [root@virtue ~]# whereis svn
+            svn:
+            [root@virtue ~]# whereis git
+            git: /usr/bin/git /usr/握手/man/man1/git.1.gz
+            
+    3. locate
+        locate可以快速的找到文件的位置，因为locate查找的是数据库的文件来确定文件的位置
+        1.普通查找
+            查找内容: /etc下有以sh开头的文件
+            [root@virtue ~]# locate /etc/sh
+            /etc/shadow
+            /etc/shadow-
+            /etc/shells
+        2.手动更新数据库
+            [root@virtue ~]# updatedb
+    4.find
+        Linux下find命令在目录结构中搜索文件，并执行指定的操作。
+        1.按名称查找
+            find / -name filename
+            find / -name "demo.py" 
+            find . -name "*.txt"       在当前目录及子目录中查找所有的*.txt文件
+            find /etc -name "host*"    在/etc目录中查找文件名以host开头的文件
+            
+        2.按权限查找
+            find -perm 755              在当前目录下查找文件权限位为755的文件 
+        3.查找子目录
+            find / -depth -name "CON.FILE"    首先匹配所有的文件然后再进入子目录中查找
+            
+        4.按时间查找
+            用减号-来限定更改时间在距今n日以内的文件
+            用加号+来限定更改时间在距今n日以前的文件
+            
+            在系统/root目录下查找更改时间在5日以内的文件
+                find /root -mtime -5 -print
+                
+        5.按类型查找
+            类型	说明
+            -type b	查找块设备
+            -type d	查找目录
+            -type c	查找字符设备文件
+            -type p	查找管道文件
+            -type l	查找符号链接文件
+            -type f	查找普通文件
+            
+            在/etc目录下查找所有的目录
+                find /etc -type d
+                
+        6.按文件大小查找
+         find . -type f -size +1000k
+
 
 # 安装MySQL5.7
 
