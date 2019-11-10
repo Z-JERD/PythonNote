@@ -1,3 +1,9 @@
+## Windows清除C盘
+	【C:\Windows\SoftwareDistribution\Download】，我们只需要进入该目录，将里面的垃圾直接删除，就可以省下很多空间。
+
+	另外，我们还可以清理下软件的缓存数据，具体路径是在【C:\Users\个人用户名\AppData\Local\Temp
+
+
 ## VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
     
