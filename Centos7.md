@@ -7,6 +7,30 @@
 ## VirtualBox下安装CentOS7系统
     https://www.cnblogs.com/hihtml5/p/8217062.html
     
+## CentOS 7下sSamba服务器的安装与配置
+	
+	https://www.cnblogs.com/muscleape/p/6385583.html
+### smb.conf
+	[global]
+		workgroup = SAMBA
+		security = user
+
+		passdb backend = tdbsam
+
+		printing = cups
+		printcap name = cups
+		load printers = yes
+		cups options = raw
+
+	[share]
+		comment = shared directories
+		path = /share/local/%u
+		browseable = yes
+		writable = yes
+		read only = no
+		valid users = @uap
+		invalid users = uap
+    
 # Linux基本操作命令
 ### 查看当前系统的版本和内核：
         1.版本信息
