@@ -1,6 +1,8 @@
 Ubuntu基本操作：
+
 1.oracle vm中安装ubuntu
 	https://jingyan.baidu.com/article/b24f6c823862a986bfe5dadc.html?qq-pf-to=pcqq.group
+
 2.vm中安装ubuntu
 	https://blog.csdn.net/u013142781/article/details/50529030
 
@@ -10,8 +12,10 @@ Ubuntu基本操作：
 	解决方案：
 	sudo rm /var/cache/apt/archives/lock
 	sudo rm /var/lib/dpkg/lock
+
 2.创建的ubuntu虚拟机与主机进行复制粘贴
 	https://blog.csdn.net/qq_34068668/article/details/80540539
+
 3.安装python和pip	
 	sudo apt-get install python3.5
 	sudo apt-get install python3-pip
