@@ -58,15 +58,20 @@
 ### rpm查看安装的软件：
     
 	rpm -qa     查看全部的软件
-    rpm -qa     软件名 例：[root@99 zhaoguangfei]# rpm -qa lrzsz 
+    
+	rpm -qa     软件名 例：[root@99 zhaoguangfei]# rpm -qa lrzsz 
     
 ### 安装rzsz：
-    yum -y install lrzsz
-        windows ===== >  linux    上传    rz 
-        linux   ===== >  windows  下载    sz 
+    
+	yum -y install lrzsz
+        
+		windows ===== >  linux    上传    rz 
+        
+		linux   ===== >  windows  下载    sz 
         
 ### 显示目录或文件的大小：
-     1.du 显示指定的目录或文件所占用的磁盘空间
+     
+	 1.du 显示指定的目录或文件所占用的磁盘空间
           [root@99 zhaoguangfei]# du            只显示当前目录下面的子目录的目录大小和当前目录的总的大小，最下面的为当前目录的总大小
           [root@99 zhaoguangfei]# du -h test    方便阅读的格式显示test目录各文件所占空间情况
           du -sh [目录/文件名]                  返回该目录/文件的总大小
@@ -76,7 +81,8 @@
         df -hl              查看磁盘剩余空间
         df -h               查看每个根路径的分区大小
         sudo fdisk -l       查看硬盘的分区 
-     3.free -h 　           查看内存大小
+     
+	 3.free -h 　           查看内存大小
   
  
 ### Linux 系统中查找最大的前 10 个文件
