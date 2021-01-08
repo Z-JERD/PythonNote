@@ -1,15 +1,18 @@
 ## Windows清除C盘
-	【C:\Windows\SoftwareDistribution\Download】，我们只需要进入该目录，将里面的垃圾直接删除，就可以省下很多空间。
+  
+   【C:\Windows\SoftwareDistribution\Download】，我们只需要进入该目录，将里面的垃圾直接删除，就可以省下很多空间。
 
 	另外，我们还可以清理下软件的缓存数据，具体路径是在【C:\Users\个人用户名\AppData\Local\Temp
 
 
 ## VirtualBox下安装CentOS7系统
-    https://www.cnblogs.com/hihtml5/p/8217062.html
     
-## CentOS 7下sSamba服务器的安装与配置
+	https://www.cnblogs.com/hihtml5/p/8217062.html
+    
+## CentOS 7下Samba服务器的安装与配置
 	
 	https://www.cnblogs.com/muscleape/p/6385583.html
+	
 ### smb.conf
 	[global]
 		workgroup = SAMBA
@@ -49,10 +52,12 @@
      
      
 ### 查看端口：
-    netstat -tunlp | grep 80
+    
+	netstat -tunlp | grep 80
             
 ### rpm查看安装的软件：
-    rpm -qa     查看全部的软件
+    
+	rpm -qa     查看全部的软件
     rpm -qa     软件名 例：[root@99 zhaoguangfei]# rpm -qa lrzsz 
     
 ### 安装rzsz：
