@@ -443,8 +443,11 @@
 ## Nginx和Uwsgi联合使用
 	
 ### 1.uwsgi自定义端口号启动
+	
 	uwsgi配置文件使用yaml格式
+	
 	flask_demo.yaml
+		
 		flask_demo:
 		  wsgi-file: app.py
 		  socket: 127.0.0.1:8001
@@ -455,6 +458,7 @@
 	查看服务日志：tail -f /var/wsgi/flask_demo.log
 	
 	nginx配置：添加以下内容
+	
 	server {
 			listen      80; 
 			server_name   _;
@@ -467,13 +471,15 @@
 	    } 
 
 ### 2.uwsgi定义socket文件启动
+	
 	flask_demo:
-			  wsgi-file: app.py
-			  socket: /var/wsgi/flask_demo.socket
-			  pidfile: /var/wsgi/flask_demo.pid
-			  daemonize: /var/wsgi/flask_demo.log
+		  wsgi-file: app.py
+          socket: /var/wsgi/flask_demo.socket
+          pidfile: /var/wsgi/flask_demo.pid
+          daemonize: /var/wsgi/flask_demo.log
 			  
 	配置Nginx：
+	
 	server {
                         listen      9000;
                         server_name   _;
@@ -485,6 +491,7 @@
             }
             
     Nginx报错：connect() to unix:/var/wsgi/flask_demo.socket failed (111: Connection refused)
+    
     解决方案：
     	修改Nginx的配置文件 vim /etc/nginx/nginx.conf：
     	前几行的内容如下：
@@ -497,42 +504,90 @@
 
 
 ### 3.Nginx中一个server配置多个服务
-	uwsgi配置文件
-		flask_demo:
-		  wsgi-file: app.py
-		  socket: /var/wsgi/flask_demo.socket
-		  #http: 0.0.0.0:8000
-		  pidfile: /var/wsgi/flask_demo.pid
-		  daemonize: /var/wsgi/flask_demo.log
-	
-		secondary:
-		  wsgi-file: secondary.py
-		  socket: /var/wsgi/secondary.socket
-		  pidfile: /var/wsgi/secondary.pid
-		  daemonize: /var/wsgi/secondary.log
-		  
-	Nginx服务配置:
-		url以index开头请求发到flask_demo这个服务中
-			以secondary开头的请求发到secondary这个服务中
-	
-		server {
-					
-					listen      9000; 
-					server_name   _;
-					location /index { 
-						
-						 include 	 uwsgi_params;
-						 uwsgi_pass      unix:/var/wsgi/flask_demo.socket;
-					}
-		
-					location /secondary {
-										
-										 include         uwsgi_params;
-										 uwsgi_pass      unix:/var/wsgi/secondary.socket;
-								}  
-		
-		
-				} 
+#### 1. Python服务配置文件：
+
+    通过http接口访问不走Nginx层：通常用在内部接口访问
+        
+        0.0.0.0:12018 在其他机器上均能访问此服务
+        
+        127.0.0.1:12019 只能在当前机器上访问此服务
+    
+    demo.yaml：
+        
+        secondary:
+            wsgi-file: secondary.py
+            socket: /var/wsgi/secondary.socket
+            http: 127.0.0.1:12019
+            pidfile: /var/wsgi/secondary.pid
+            daemonize: /var/wsgi/secondary.log
+            processes: 1
+            threads : 1
+    
+        secondary_income:
+            wsgi-file: srv_secondary_income.py
+            socket: /var/wsgi/secondary_income.socket
+            http: 0.0.0.0:12018
+            pidfile: /var/wsgi/secondary_income.pid
+            daemonize: /var/wsgi/secondary_income.log
+          
+    demo.ini:
+    
+        [secondary]
+        wsgi-file: secondary.py
+        socket: /var/wsgi/secondary.socket
+        http: 127.0.0.1:12019
+        pidfile: /var/wsgi/secondary.pid
+        daemonize: /var/wsgi/secondary.log
+        processes: 1
+        threads : 1
+        
+        [secondary_income]
+        wsgi-file: srv_secondary_income.py
+        socket: /var/wsgi/secondary_income.socket
+        http: 0.0.0.0:12018
+        pidfile: /var/wsgi/secondary_income.pid
+        daemonize: /var/wsgi/secondary_income.log
+  
+#### 2. 启动服务
+
+    启动yaml服务：
+        uwsgi --stop /var/wsgi/secondary_income.pid
+        uwsgi -y demo.yaml:secondary_income && tail -f /var/wsgi/secondary_income.log  
+        
+    启动ini服务：
+    
+        uwsgi --stop /var/wsgi/secondary_income.pid
+        uwsgi -ini demo.yaml:secondary_income && tail -f /var/wsgi/secondary_income.log
+        
+#### 3.Nginx服务配置
+
+    url 以secondary_income开头请求发到secondary_income这个服务中
+    
+    以secondary开头的请求发到secondary这个服务中
+    
+    server {
+                
+                listen      9000; 
+                server_name   _;
+                
+                location /secondary_income {
+                            
+                            include     uwsgi_params;
+                                                   
+                            uwsgi_pass   unix:/var/wsgi/secondary_income.socket;
+                     
+                        }
+                        
+                location /secondary {
+                            
+                            include     uwsgi_params;
+        
+                            uwsgi_pass   unix:/var/wsgi/secondary.socket;
+    
+                        }
+            
+                        
+            } 
 
 
 
