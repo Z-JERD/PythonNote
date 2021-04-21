@@ -84,7 +84,25 @@
         sudo fdisk -l       查看硬盘的分区 
      
 	 3.free -h 　           查看内存大小
-  
+ 
+### Linux统计文件：
+
+#### Linux下统计当前文件夹下的文件个数、目录个数:
+
+	ls -l|grep "^-"|wc -l  统计当前文件夹下文件的个数
+	
+	ls -l|grep "^d"|wc -l  统计当前文件夹下目录的个数
+	
+	ls -lR|grep "^-"|wc -l  统计当前文件夹下文件的个数，包括子文件夹里的
+
+	ls -lR|grep "^d"|wc -l   统计文件夹下目录的个数，包括子文件夹里的
+
+
+#### linux统计文件行数:
+
+	1. 统计当前目录下所有csv文件行数
+		
+		find . -name '*.csv' | xargs wc -l
  
 ### Linux 系统中查找最大的前 10 个文件
     find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 10
@@ -106,7 +124,6 @@
     
     找出当前目录下大于1M的文件
         find . -type f -size +1000k  -print0 | xargs -0 du -h | sort -rh
-
 
 
     
