@@ -1,0 +1,10 @@
+set $resp_http_origin '*';
+if ( $http_origin ) {
+    set $resp_http_origin $http_origin;
+}
+
+more_set_headers 'Access-Control-Allow-Methods: POST, OPTIONS, HEAD, GET';
+more_set_headers 'Access-Control-Allow-Credentials: true';
+more_set_headers 'Access-Control-Allow-Headers: Origin, Accept-Language, Accept-Encoding, X-Forwarded-For, Connection, Accept, User-Agent, Host, Referer, Cookie, Content-Type, Cache-Control, *';
+
+more_set_headers 'Access-Control-Allow-Origin: $resp_http_origin';

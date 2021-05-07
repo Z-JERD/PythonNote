@@ -1,0 +1,24 @@
+flask_demo:
+  wsgi-file: app.py
+  socket: /var/wsgi/flask_demo.socket
+  #http: 0.0.0.0:8000
+  pidfile: /var/wsgi/flask_demo.pid
+  daemonize: /var/wsgi/flask_demo.log
+
+secondary:
+  wsgi-file: secondary.py
+  socket: /var/wsgi/secondary.socket
+  http: 0.0.0.0:12019
+  pidfile: /var/wsgi/secondary.pid
+  daemonize: /var/wsgi/secondary.log
+  processes: 1
+  threads : 1
+
+secondary_income:
+  srv_name: secondary_income
+  wsgi-file: srv_secondary_income.py
+  socket: /var/wsgi/secondary_income.socket
+  http: 0.0.0.0:12018
+  pidfile: /var/wsgi/secondary_income.pid
+  daemonize: /var/wsgi/secondary_income.log
+  
