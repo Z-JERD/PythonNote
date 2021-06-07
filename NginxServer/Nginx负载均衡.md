@@ -6,43 +6,43 @@
 
     写入如下配置：
 
-        upstream s14django {   
-                #池子中存放2个服务器，默认轮训方式调度服务器
-                server 192.168.12.38:8000; 
-                server 192.168.12.67:8000;
-            }
+    upstream s14django {   
+            #池子中存放2个服务器，默认轮训方式调度服务器
+            server 192.168.12.38:8000; 
+            server 192.168.12.67:8000;
+        }
 
        
-        server {
-               
-                listen 80;
-               server_name  www.s14huoying.com;
-                
-                location / {
-              
-                  #当请求发送到www.s14huoying.com的时候，匹配到 /  ，就执行以下代码
-                  proxy_pass http://s14django;
-              
-                  #这个proxy_params文件创建在/opt/nginx1-12/conf底下
-             
-                 include proxy_params;
-        }
+    server {
+
+            listen 80;
+           server_name  www.s14huoying.com;
+
+            location / {
+
+              #当请求发送到www.s14huoying.com的时候，匹配到 /  ，就执行以下代码
+              proxy_pass http://s14django;
+
+              #这个proxy_params文件创建在/opt/nginx1-12/conf底下
+
+             include proxy_params;
+    }
 
 ### 2. 手动创建这个参数文件
 
     touch /opt/nginx1-12/conf/proxy_params      写入信息
 
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
- 
-        proxy_connect_timeout 30;
-        proxy_send_timeout 60;
-        proxy_read_timeout 60;
- 
-        proxy_buffering on;
-        proxy_buffer_size 32k;
-        proxy_buffers 4 128k;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_connect_timeout 30;
+        proxy_send_timeout 60;
+        proxy_read_timeout 60;
+
+        proxy_buffering on;
+        proxy_buffer_size 32k;
+        proxy_buffers 4 128k;
 
     重启Nginx
 
